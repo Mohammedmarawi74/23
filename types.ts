@@ -3,7 +3,7 @@ import React from 'react';
 
 export interface SlideElement {
   id: string;
-  type: 'title' | 'subtitle' | 'body' | 'image' | 'button' | 'logo';
+  type: 'title' | 'subtitle' | 'body' | 'image' | 'button' | 'logo' | 'footer';
   content: string;
   style: React.CSSProperties;
 }
@@ -17,6 +17,7 @@ export interface Slide {
   textColor: string;      // لون النصوص الرئيسية
   backgroundImage?: string;
   elements: SlideElement[];
+  logoIndex?: number; // Index of selected logo (0-3), -1 for no logo
 }
 
 export interface Carousel {

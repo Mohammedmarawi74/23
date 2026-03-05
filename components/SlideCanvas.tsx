@@ -7,6 +7,13 @@ interface SlideCanvasProps {
   isActive: boolean;
 }
 
+const LOGO_OPTIONS = [
+  '/logooo/logo-1.png',
+  '/logooo/logo-2.png',
+  '/logooo/logo-3.png',
+  '/logooo/logo-4.png'
+];
+
 export const SlideCanvas: React.FC<SlideCanvasProps> = ({ slide, isActive }) => {
   const cssVars = {
     '--bg-color': slide.backgroundColor,
@@ -14,6 +21,9 @@ export const SlideCanvas: React.FC<SlideCanvasProps> = ({ slide, isActive }) => 
     '--secondary-color': slide.secondaryColor,
     '--text-color': slide.textColor,
   } as React.CSSProperties;
+
+  const logoIndex = slide.logoIndex ?? 0;
+  const selectedLogo = LOGO_OPTIONS[logoIndex];
 
   return (
     <div
@@ -40,14 +50,14 @@ export const SlideCanvas: React.FC<SlideCanvasProps> = ({ slide, isActive }) => 
             return (
               <div key={el.id} className="poster-logo-container">
                 <div className="flex items-center gap-3">
-                  {el.content ? (
-                    <img src={el.content} alt="Logo" className="poster-logo-image" />
+                  {selectedLogo ? (
+                    <img src={selectedLogo} alt="Logo" className="poster-logo-image" />
                   ) : (
                     <div className="poster-logo-placeholder">
                       <span className="poster-logo-text">TS</span>
                     </div>
                   )}
-                  {!el.content && <span className="poster-brand-label">Tech Studio</span>}
+                  {!selectedLogo && <span className="poster-brand-label">Tech Studio</span>}
                 </div>
                 <div className="poster-divider"></div>
               </div>
@@ -77,17 +87,11 @@ export const SlideCanvas: React.FC<SlideCanvasProps> = ({ slide, isActive }) => 
               </div>
             );
           }
-          if (el.type === 'button') {
+          if (el.type === 'footer') {
             return (
-              <div key={el.id} className="poster-button-section">
-                <button className="poster-button">
-                  {el.content}
-                </button>
-                <div className="poster-pagination">
-                  <div className="poster-pagination-dot"></div>
-                  <div className="poster-pagination-dot"></div>
-                  <div className="poster-pagination-dot active"></div>
-                </div>
+              <div key={el.id} className="poster-footer-section">
+                <div className="poster-footer-text-right">منصة المستثمر</div>
+                <div className="poster-footer-text-left">al_investor.com</div>
               </div>
             );
           }

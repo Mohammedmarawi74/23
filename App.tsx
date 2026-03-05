@@ -23,11 +23,17 @@ const THEMES = [
   { name: 'الوضع الداكن', bg: '#0f172a', primary: '#2dd4bf', secondary: '#1e293b', text: '#f8fafc' },
 ];
 
+const LOGO_OPTIONS = [
+  { id: 0, name: 'الشعار 1', path: '/logooo/logo-1.png' },
+  { id: 1, name: 'الشعار 2', path: '/logooo/logo-2.png' },
+  { id: 2, name: 'الشعار 3', path: '/logooo/logo-3.png' },
+  { id: 3, name: 'الشعار 4', path: '/logooo/logo-4.png' },
+];
+
 type TabType = 'ai' | 'text' | 'design' | 'custom';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('ai');
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
   const [customCss, setCustomCss] = useState<string>(`/* محرر الأنماط المتقدم */
 .poster-root { transition: all 0.4s ease; }
@@ -48,7 +54,7 @@ const App: React.FC = () => {
           { id: 't1', type: 'title', content: 'مستقبل الذكاء الاصطناعي', style: {} },
           { id: 's1', type: 'subtitle', content: 'ثورة في عالم التصميم', style: {} },
           { id: 'b1', type: 'body', content: 'اكتشف كيف يغير الذكاء الاصطناعي طريقة تفكيرنا في الإبداع الرقمي وصناعة المحتوى البصري المذهل.', style: {} },
-          { id: 'btn1', type: 'button', content: 'WWW.TECHSTUDIO.COM', style: {} }
+          { id: 'f1', type: 'footer', content: '', style: {} }
         ]
       }
     ]
@@ -89,6 +95,18 @@ const App: React.FC = () => {
     setCarousel({ ...carousel, slides: newSlides });
   };
 
+  const updateLogo = (logoIndex: number) => {
+    const newSlides = [...carousel.slides];
+    newSlides[activeSlideIndex] = { ...newSlides[activeSlideIndex], logoIndex };
+    setCarousel({ ...carousel, slides: newSlides });
+  };
+
+  const removeLogo = () => {
+    const newSlides = [...carousel.slides];
+    newSlides[activeSlideIndex] = { ...newSlides[activeSlideIndex], logoIndex: -1 };
+    setCarousel({ ...carousel, slides: newSlides });
+  };
+
   const handleGenerate = async () => {
     if (!prompt) return;
     setIsGenerating(true);
@@ -109,7 +127,7 @@ const App: React.FC = () => {
           { id: `t-${idx}`, type: 'title', content: item.title, style: {} },
           { id: `s-${idx}`, type: 'subtitle', content: item.subtitle, style: {} },
           { id: `b-${idx}`, type: 'body', content: item.body, style: {} },
-          { id: `btn-${idx}`, type: 'button', content: item.button || 'ابدأ الآن', style: {} }
+          { id: `f-${idx}`, type: 'footer', content: '', style: {} }
         ]
       }));
       setCarousel({ ...carousel, slides: newSlides });
@@ -118,22 +136,6 @@ const App: React.FC = () => {
       console.error(error);
     } finally {
       setIsGenerating(false);
-    }
-  };
-
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        const newSlides = carousel.slides.map(slide => ({
-          ...slide,
-          elements: slide.elements.map(el => el.type === 'logo' ? { ...el, content: base64String } : el)
-        }));
-        setCarousel({ ...carousel, slides: newSlides });
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -239,10 +241,10 @@ const App: React.FC = () => {
             <div className="space-y-6">
               <h3 className="text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] mb-4">تحرير الشريحة الحالية</h3>
               {carousel.slides[activeSlideIndex].elements.map(el => (
-                el.type !== 'logo' && (
+                el.type !== 'logo' && el.type !== 'footer' && (
                   <div key={el.id} className="space-y-2 group">
-                    <label className="text-[10px] font-bold text-slate-500">{el.type === 'title' ? 'العنوان الرئيسي' : el.type === 'subtitle' ? 'العنوان الفرعي' : el.type === 'body' ? 'النص التفصيلي' : 'نص الزر'}</label>
-                    <input 
+                    <label className="text-[10px] font-bold text-slate-500">{el.type === 'title' ? 'العنوان الرئيسي' : el.type === 'subtitle' ? 'العنوان الفرعي' : 'النص التفصيلي'}</label>
+                    <input
                       type="text"
                       value={el.content}
                       onChange={(e) => updateElement(el.id, e.target.value)}
@@ -312,14 +314,73 @@ const App: React.FC = () => {
 
               <div className="h-px bg-slate-800"></div>
 
-              {/* الشعار والوسائط */}
+              {/* اختيار الشعار */}
               <section className="space-y-4">
-                <h3 className="text-slate-400 font-bold text-sm">الوسائط</h3>
+                <h3 className="text-slate-400 font-bold text-sm">اختيار الشعار</h3>
+                
+                {/* شبكة اختيار الشعار */}
+                <div className="grid grid-cols-4 gap-3">
+                  {LOGO_OPTIONS.map((logo) => {
+                    const currentLogoIndex = carousel.slides[activeSlideIndex]?.logoIndex ?? 0;
+                    const isSelected = currentLogoIndex === logo.id;
+                    
+                    return (
+                      <button
+                        key={logo.id}
+                        onClick={() => updateLogo(logo.id)}
+                        className={`relative aspect-square rounded-xl border-2 overflow-hidden transition-all group ${
+                          isSelected 
+                            ? 'border-cyan-500 ring-2 ring-cyan-500/30' 
+                            : 'border-slate-700 hover:border-slate-500'
+                        }`}
+                      >
+                        <img 
+                          src={logo.path} 
+                          alt={logo.name}
+                          className="w-full h-full object-contain bg-slate-900 p-2"
+                        />
+                        {isSelected && (
+                          <div className="absolute inset-0 bg-cyan-500/20 flex items-center justify-center">
+                            <svg className="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* زر إزالة الشعار */}
+                <button
+                  onClick={removeLogo}
+                  className="w-full py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs font-bold hover:bg-red-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  إزالة الشعار
+                </button>
+
+                {/* حالة الشعار الحالي */}
+                <div className="text-center">
+                  <p className="text-[10px] text-slate-500">
+                    {carousel.slides[activeSlideIndex]?.logoIndex === -1 
+                      ? 'لا يوجد شعار محدد' 
+                      : `الشعار المحدد: ${LOGO_OPTIONS[carousel.slides[activeSlideIndex]?.logoIndex ?? 0]?.name}`
+                    }
+                  </p>
+                </div>
+              </section>
+
+              <div className="h-px bg-slate-800"></div>
+
+              {/* الوسائط */}
+              <section className="space-y-4">
+                <h3 className="text-slate-400 font-bold text-sm">الوسائط الأخرى</h3>
                 <div className="flex gap-2">
-                  <button onClick={() => fileInputRef.current?.click()} className="flex-1 py-3 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all">رفع شعار</button>
                   <button onClick={handleGenerateImage} className="flex-1 py-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl text-xs font-bold hover:bg-cyan-500/20 transition-all">خلفية ذكية</button>
                 </div>
-                <input type="file" ref={fileInputRef} onChange={handleLogoUpload} accept="image/*" className="hidden" />
               </section>
             </div>
           )}
