@@ -1,8 +1,11 @@
 /* Tech Carousel Studio - Custom Styles */
 
 /* ===== Base Styles ===== */
-body {
+* {
   font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+body {
   background-color: #020617;
   color: #f8fafc;
   margin: 0;
@@ -47,16 +50,15 @@ body {
   position: relative;
   width: 450px;
   height: 560px;
-  border-radius: 2rem;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
-  transition: all 0.5s ease;
   background-size: cover;
   background-position: center;
 }
 
 .poster-root.active {
-  ring: 2px solid rgba(34, 211, 238, 0.2);
+  outline: 2px solid rgba(34, 211, 238, 0.2);
 }
 
 .poster-root.inactive {
@@ -221,14 +223,11 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  transition: transform 0.2s ease;
   background-color: var(--primary-color);
   color: var(--bg-color);
 }
 
-.poster-button:hover {
-  transform: scale(1.05);
-}
+/* No animation on hover */
 
 /* Footer Section */
 .poster-footer-section {
@@ -257,7 +256,6 @@ body {
   color: var(--text-color);
   opacity: 0.8;
   letter-spacing: 0.05em;
-  font-family: 'JetBrains Mono', monospace;
   white-space: nowrap;
 }
 
@@ -290,22 +288,13 @@ body {
   pointer-events: none;
   opacity: 0;
   background-color: rgba(34, 211, 238, 0.2);
-  transition: opacity 0.3s ease;
 }
 
 .poster-root:hover .poster-scan-line {
-  animation: scan 3s linear infinite;
   opacity: 1;
 }
 
-@keyframes scan {
-  0% {
-    top: 0;
-  }
-  100% {
-    top: 100%;
-  }
-}
+/* Animation removed */
 
 /* ===== Custom CSS Editor ===== */
 .custom-css-editor {

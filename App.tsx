@@ -36,7 +36,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('ai');
   const exportRef = useRef<HTMLDivElement>(null);
   const [customCss, setCustomCss] = useState<string>(`/* محرر الأنماط المتقدم */
-.poster-root { transition: all 0.4s ease; }
+.poster-root { /* No transition */ }
 .poster-title { text-transform: uppercase; }`);
 
   const [carousel, setCarousel] = useState<Carousel>({
@@ -205,7 +205,7 @@ const App: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
-              className={`flex-1 py-3 flex flex-col items-center gap-1 text-[10px] font-bold uppercase tracking-wider transition-all rounded-xl ${activeTab === tab.id ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'text-slate-500 hover:bg-slate-800/50'}`}
+              className={`flex-1 py-3 flex flex-col items-center gap-1 text-[10px] font-bold uppercase tracking-wider rounded-xl ${activeTab === tab.id ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'text-slate-500 hover:bg-slate-800/50'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d={tab.icon} />
@@ -229,7 +229,7 @@ const App: React.FC = () => {
                 <button 
                   onClick={handleGenerate}
                   disabled={isGenerating}
-                  className={`w-full py-4 rounded-xl font-bold transition-all ${isGenerating ? 'bg-slate-800 text-slate-500' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/20'}`}
+                  className={`w-full py-4 rounded-xl font-bold ${isGenerating ? 'bg-slate-800 text-slate-500' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/20'}`}
                 >
                   {isGenerating ? 'جاري التوليد...' : 'إنشاء السلسلة الآن'}
                 </button>
@@ -257,7 +257,7 @@ const App: React.FC = () => {
           )}
 
           {activeTab === 'design' && (
-            <div className="space-y-8 animate-in slide-in-from-right duration-300">
+            <div className="space-y-6">
               {/* الثيمات الجاهزة */}
               <section>
                 <h3 className="text-slate-400 font-bold text-sm mb-4">الثيمات الجاهزة</h3>
@@ -266,7 +266,7 @@ const App: React.FC = () => {
                     <button
                       key={theme.name}
                       onClick={() => applyTheme(theme)}
-                      className={`p-3 rounded-xl border transition-all text-right group ${carousel.slides[activeSlideIndex].backgroundColor === theme.bg && carousel.slides[activeSlideIndex].primaryColor === theme.primary ? 'border-cyan-500 bg-cyan-500/5' : 'border-slate-800 bg-slate-900/30 hover:border-slate-600'}`}
+                      className={`p-3 rounded-xl border text-right group ${carousel.slides[activeSlideIndex].backgroundColor === theme.bg && carousel.slides[activeSlideIndex].primaryColor === theme.primary ? 'border-cyan-500 bg-cyan-500/5' : 'border-slate-800 bg-slate-900/30 hover:border-slate-600'}`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: theme.primary }}></div>
@@ -302,7 +302,7 @@ const App: React.FC = () => {
                           onChange={(e) => updateColor(item.key as any, e.target.value)}
                           className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
                         />
-                        <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 p-2 rounded-lg group-hover:border-slate-600 transition-all">
+                        <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 p-2 rounded-lg group-hover:border-slate-600">
                            <div className="w-8 h-4 rounded" style={{ backgroundColor: (carousel.slides[activeSlideIndex] as any)[item.key] }}></div>
                            <span className="text-[10px] font-mono text-slate-400 uppercase">{(carousel.slides[activeSlideIndex] as any)[item.key]}</span>
                         </div>
@@ -328,7 +328,7 @@ const App: React.FC = () => {
                       <button
                         key={logo.id}
                         onClick={() => updateLogo(logo.id)}
-                        className={`relative aspect-square rounded-xl border-2 overflow-hidden transition-all group ${
+                        className={`relative aspect-square rounded-xl border-2 overflow-hidden group ${
                           isSelected 
                             ? 'border-cyan-500 ring-2 ring-cyan-500/30' 
                             : 'border-slate-700 hover:border-slate-500'
@@ -354,7 +354,7 @@ const App: React.FC = () => {
                 {/* زر إزالة الشعار */}
                 <button
                   onClick={removeLogo}
-                  className="w-full py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs font-bold hover:bg-red-500/20 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs font-bold hover:bg-red-500/20 flex items-center justify-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -379,7 +379,7 @@ const App: React.FC = () => {
               <section className="space-y-4">
                 <h3 className="text-slate-400 font-bold text-sm">الوسائط الأخرى</h3>
                 <div className="flex gap-2">
-                  <button onClick={handleGenerateImage} className="flex-1 py-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl text-xs font-bold hover:bg-cyan-500/20 transition-all">خلفية ذكية</button>
+                  <button onClick={handleGenerateImage} className="flex-1 py-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl text-xs font-bold hover:bg-cyan-500/20">خلفية ذكية</button>
                 </div>
               </section>
             </div>
@@ -405,10 +405,10 @@ const App: React.FC = () => {
             <div ref={exportRef}>
               <SlideCanvas slide={carousel.slides[activeSlideIndex]} isActive={true} />
             </div>
-            <div className="absolute top-1/2 -left-16 -translate-y-1/2 flex flex-col gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <div className="absolute top-1/2 -left-16 -translate-y-1/2 flex flex-col gap-4 opacity-0 group-hover:opacity-100">
                <button onClick={() => setActiveSlideIndex(prev => Math.max(0, prev - 1))} className="p-3 bg-slate-900 border border-slate-800 rounded-full hover:bg-cyan-500 hover:text-slate-950 shadow-xl"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg></button>
             </div>
-            <div className="absolute top-1/2 -right-16 -translate-y-1/2 flex flex-col gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <div className="absolute top-1/2 -right-16 -translate-y-1/2 flex flex-col gap-4 opacity-0 group-hover:opacity-100">
                <button onClick={() => setActiveSlideIndex(prev => Math.min(carousel.slides.length - 1, prev + 1))} className="p-3 bg-slate-900 border border-slate-800 rounded-full hover:bg-cyan-500 hover:text-slate-950 shadow-xl"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg></button>
             </div>
           </div>
@@ -416,7 +416,7 @@ const App: React.FC = () => {
 
         <div className="mt-8 flex gap-4 p-4 bg-slate-900/40 backdrop-blur-md rounded-2xl border border-slate-800/50">
           {carousel.slides.map((_, idx) => (
-            <button key={idx} onClick={() => setActiveSlideIndex(idx)} className={`w-12 h-1 rounded-full transition-all duration-500 ${activeSlideIndex === idx ? 'bg-cyan-400 w-16' : 'bg-slate-700'}`} />
+            <button key={idx} onClick={() => setActiveSlideIndex(idx)} className={`w-12 h-1 rounded-full ${activeSlideIndex === idx ? 'bg-cyan-400 w-16' : 'bg-slate-700'}`} />
           ))}
         </div>
 
@@ -424,11 +424,11 @@ const App: React.FC = () => {
           <button 
             onClick={handleExport}
             disabled={isExporting}
-            className={`bg-white text-slate-950 px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 transition-all flex items-center gap-2 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-white text-slate-950 px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {isExporting ? (
               <>
-                <svg className="animate-spin h-4 w-4 text-slate-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 text-slate-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>

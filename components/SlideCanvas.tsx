@@ -90,8 +90,8 @@ export const SlideCanvas: React.FC<SlideCanvasProps> = ({ slide, isActive }) => 
           if (el.type === 'footer') {
             return (
               <div key={el.id} className="poster-footer-section">
-                <div className="poster-footer-text-right">منصة المستثمر</div>
-                <div className="poster-footer-text-left">al_investor.com</div>
+                <div className="poster-footer-text-right">منصة المستثمر الاقتصادية</div>
+                <div className="poster-footer-text-left">al-investor.com</div>
               </div>
             );
           }
